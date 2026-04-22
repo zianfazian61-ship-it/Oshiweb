@@ -1,0 +1,481 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Love Quest, Virgi Profile & Soulmate ✨</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS GLOBAL & STATE MANAGEMENT --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { overflow: hidden; background: #ffeef2; touch-action: none; }
+        
+        .page-section { display: none; width: 100%; height: 100vh; }
+        .active-section { display: block; }
+
+        /* --- CSS CODINGAN 1 (GAME & PROFILE) --- */
+        :root {  
+            --sky-blue: #87ceeb;  
+            --pink-bg: #ffeef2;  
+            --pink-primary: #ff85a1;  
+            --pink-dark: #ff4d6d;  
+            --grass-green: #91e481;
+            --p-rose: #ffafbd;
+            --glass: rgba(255, 255, 255, 0.8);
+            --accent: #ff85a2;
+        }  
+  
+        #game-container {
+            display: flex; flex-direction: column; height: 100vh; width: 100%;
+            position: fixed; top: 0; left: 0; z-index: 1000;
+        }
+
+        #game-viewport {  
+            flex: 1; position: relative; overflow: hidden;  
+            background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 100%);  
+            border-bottom: 4px solid #333;  
+        }  
+  
+        #world { position: absolute; height: 100%; width: 4000px; left: 0; bottom: 0; }  
+        .cloud { position: absolute; background: white; border-radius: 10px; filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.1)); z-index: 1; }  
+        .bush { position: absolute; bottom: 60px; width: 80px; height: 40px; background: #4caf50; border-top-left-radius: 20px; border-top-right-radius: 20px; border: 4px solid #2e7d32; z-index: 2; }  
+        .flower { position: absolute; bottom: 60px; width: 10px; height: 20px; background: #4caf50; z-index: 2; }  
+        .flower::after { content: ''; position: absolute; top: -10px; left: -5px; width: 20px; height: 20px; background: #ff4081; border-radius: 50%; }  
+        #player { position: absolute; bottom: 60px; left: 100px; width: 64px; height: 64px; z-index: 10; }  
+        .pixel-char { width: 100%; height: 100%; image-rendering: pixelated; }  
+        .leg { transition: transform 0.1s; }  
+        .walking #leg-left { animation: walk-left 0.4s infinite alternate; }  
+        .walking #leg-right { animation: walk-right 0.4s infinite alternate; }  
+        .walking .body-group { animation: body-bob 0.4s infinite alternate; }  
+        @keyframes walk-left { from { transform: translateX(0); } to { transform: translateX(4px); } }  
+        @keyframes walk-right { from { transform: translateX(0); } to { transform: translateX(-4px); } }  
+        @keyframes body-bob { from { transform: translateY(0); } to { transform: translateY(-2px); } }  
+        .win-pose .arm-left { transform: rotate(-120deg) translate(-5px, -5px); transition: 0.5s; }  
+        .win-pose .arm-right { transform: rotate(120deg) translate(5px, -5px); transition: 0.5s; }  
+        .pixel-heart { position: relative; width: 10px; height: 10px; box-shadow: 20px 0 #000, 30px 0 #000, 70px 0 #000, 80px 0 #000, 10px 10px #000, 20px 10px #f00, 30px 10px #f00, 40px 10px #000, 60px 10px #000, 70px 10px #f00, 80px 10px #f00, 90px 10px #000, 0 20px #000, 10px 20px #f00, 20px 20px #f00, 30px 20px #f00, 40px 20px #f00, 50px 20px #000, 60px 20px #f00, 70px 20px #fff, 80px 20px #fff, 90px 20px #f00, 100px 20px #000, 0 30px #000, 10px 30px #a32, 20px 30px #f00, 30px 30px #f00, 40px 30px #f00, 50px 30px #f00, 60px 30px #f00, 70px 30px #f00, 80px 30px #fff, 90px 30px #f00, 100px 30px #000, 0 40px #000, 10px 40px #a32, 20px 40px #a32, 30px 40px #f00, 40px 40px #f00, 50px 40px #f00, 60px 40px #f00, 70px 40px #f00, 80px 40px #f00, 90px 40px #f00, 100px 40px #000, 10px 50px #000, 20px 50px #a32, 30px 50px #a32, 40px 50px #f00, 50px 50px #f00, 60px 50px #f00, 70px 50px #f00, 80px 50px #f00, 90px 50px #000, 20px 60px #000, 30px 60px #a32, 40px 60px #a32, 50px 60px #f00, 60px 60px #f00, 70px 60px #f00, 80px 60px #000, 30px 70px #000, 40px 70px #a32, 50px 70px #a32, 60px 70px #f00, 70px 70px #000, 40px 80px #000, 50px 80px #a32, 60px 80px #000, 50px 90px #000; }  
+        .heart-wrapper { position: absolute; bottom: 80px; left: 3500px; width: 110px; height: 100px; transform: scale(0.6); animation: pulse 1s infinite; z-index: 5; }  
+        @keyframes pulse { 0%, 100% { transform: scale(0.6); } 50% { transform: scale(0.7); } }  
+        .floor { position: absolute; bottom: 0; height: 60px; width: 4000px; background: var(--grass-green); border-top: 4px solid #333; z-index: 3; }  
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 1100; color: white; text-align: center; }  
+        .big-heart-container { width: 110px; height: 100px; margin-bottom: 60px; cursor: pointer; transform: scale(2); }  
+        .controls { height: 140px; background: #ff85a1; display: flex; justify-content: center; align-items: center; gap: 20px; padding: 10px; border-top: 4px solid #333; }  
+        .btn { width: 75px; height: 75px; background: white; border: 4px solid #333; box-shadow: 0 4px 0 #333; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; user-select: none; font-family: 'Press Start 2P', cursive; }  
+        .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #333; }  
+        .btn-jump { width: 110px; background: #ffff00; }  
+        #hint { position: fixed; top: 20px; width: 100%; text-align: center; font-size: 10px; color: var(--pink-dark); background: rgba(255, 255, 255, 0.8); padding: 10px 0; z-index: 50; font-family: 'Press Start 2P', cursive;}
+
+        #profile-container {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            display: none; justify-content: center; align-items: flex-start;
+            padding: 30px 15px; overflow-y: auto; z-index: 2000;
+        }
+
+        .sakura-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }  
+        .sakura { position: absolute; background-color: #ffe4e8; border-radius: 100% 0% 100% 0%; opacity: 0.6; animation: fall linear infinite; }  
+  
+        .card { width: 100%; max-width: 480px; background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 45px; border: 2px solid rgba(255, 255, 255, 0.6); box-shadow: 0 25px 50px rgba(0,0,0,0.1); padding: 30px 20px; position: relative; z-index: 10; animation: pageIn 0.8s cubic-bezier(0.23, 1, 0.32, 1); }  
+        @keyframes pageIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }  
+  
+        .video-box { width: 175px; height: 175px; margin: 0 auto 25px; }  
+        .video-inner { width: 100%; height: 100%; background: #000; border: 4px solid white; border-radius: 42% 58% 60% 40% / 45% 48% 52% 55%; overflow: hidden; animation: softMorph 12s ease-in-out infinite; box-shadow: 0 10px 30px rgba(255, 77, 109, 0.2); }  
+        @keyframes softMorph { 0%, 100% { border-radius: 42% 58% 60% 40% / 45% 48% 52% 55%; } 50% { border-radius: 58% 42% 40% 60% / 55% 52% 48% 45%; } }  
+        video { width: 100%; height: 100%; object-fit: cover; }  
+  
+        .header { text-align: center; margin-bottom: 25px; }  
+        .main-name { font-family: 'Dancing Script', cursive; font-size: 3.2rem; color: #ff4d6d; }  
+        .jiko { color: #ff4d6d; font-weight: 700; font-size: 0.85rem; margin-top: 8px; }  
+  
+        .bio-container { background: rgba(255, 255, 255, 0.4); border-radius: 30px; padding: 10px; margin-bottom: 25px; border: 1px solid rgba(255, 255, 255, 0.5); }  
+        .bio-row { display: flex; align-items: center; padding: 12px 15px; border-bottom: 1px solid rgba(255, 77, 109, 0.05); opacity: 0; animation: bioEntry 0.6s ease forwards; }  
+        @keyframes bioEntry { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }  
+        .bio-row:last-child { border-bottom: none; }  
+        .bio-label { flex: 0 0 130px; font-weight: 800; color: #999; font-size: 0.7rem; text-transform: uppercase; }  
+        .bio-value { flex: 1; color: #ff4d6d; font-weight: 700; font-size: 0.85rem; text-align: right; }  
+  
+        .action-area { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }  
+        .btn-profile { height: 65px; border-radius: 22px; display: flex; align-items: center; padding: 0 20px; text-decoration: none; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: none; cursor: pointer; font-family: inherit; }  
+        .btn-spotify { background: #1DB954; color: white; justify-content: flex-start; gap: 15px; }  
+        .icon-holder { width: 38px; height: 38px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }  
+        .icon-holder img { width: 100%; height: 100%; object-fit: cover; }  
+        .spotify-text { font-size: 0.85rem; font-weight: 800; line-height: 1.2; text-align: left; }  
+        .btn-next-profile { background: #ff4d6d; color: white; font-weight: 800; justify-content: center; letter-spacing: 1px; font-size: 1rem; border: 2px solid #ff4d6d; box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3); }  
+        .btn-profile:hover { transform: scale(1.02) translateY(-2px); filter: brightness(1.1); }  
+  
+        .sosmed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }  
+        .sosmed-box { background: white; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; transition: 0.3s; border: 1px solid rgba(0,0,0,0.03); text-decoration: none; }  
+        .sosmed-box img { width: 26px; height: 26px; object-fit: contain; }  
+        .sosmed-box:hover { transform: translateY(-5px); background: #fff5f7; }
+
+        /* --- CSS CODINGAN 3 (SOULMATE) --- */
+        #soulmate-container {
+            height: 100vh; width: 100vw; overflow: hidden;
+            background: linear-gradient(135deg, #fce4ec 0%, #ffebee 50%, #f8bbd0 100%);
+            display: none; justify-content: center; align-items: center; perspective: 1000px;
+            position: fixed; top: 0; left: 0; z-index: 3000;
+        }
+
+        #main-scene-soulmate { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: all 0.8s ease; }  
+        .pre-text { font-weight: 600; color: #ad1457; margin-bottom: 25px; font-size: 1.1rem; text-align: center; opacity: 0; transform: translateY(10px); transition: 1s ease; }  
+        .pre-text.visible { opacity: 1; transform: translateY(0); }  
+        .envelope-wrapper { position: relative; cursor: pointer; animation: dropIn 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }  
+        .envelope { width: 160px; height: 110px; background: #f48fb1; border-radius: 8px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; }  
+        .envelope::before { content: ''; position: absolute; top: 0; left: 0; border-style: solid; border-width: 55px 80px 0 80px; border-color: #f06292 transparent transparent transparent; z-index: 2; }  
+        .heart-seal { position: absolute; z-index: 3; font-size: 28px; animation: beat 1.5s infinite alternate; }  
+        @keyframes beat { to { transform: scale(1.2); } }  
+        @keyframes dropIn { 0% { transform: translateY(-120vh) rotate(-15deg); } 100% { transform: translateY(0) rotate(0deg); } }  
+        
+        #overlay-soulmate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 182, 193, 0.4); backdrop-filter: blur(15px); z-index: 10; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 1s ease; }  
+        .letter-modal { background: #ffffff; width: 90%; max-width: 500px; height: 75vh; border-radius: 15px; box-shadow: 0 30px 80px rgba(0,0,0,0.1); position: relative; overflow: hidden; display: flex; flex-direction: column; transform: scale(0.9) translateY(30px); transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1); border: 8px solid white; }  
+        .lyrics-display { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; position: relative; }  
+        .lyric-text { font-family: 'Dancing Script', cursive; font-size: 2rem; color: #ff4081; opacity: 0; transition: all 1s ease; position: absolute; width: 85%; font-weight: 700; }  
+        .lyric-text.active { opacity: 1; transform: scale(1.1); }  
+        .footer-text { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: #ad1457; font-size: 1.1rem; opacity: 0; transition: 2s ease; text-transform: uppercase; letter-spacing: 2px; }  
+        .footer-text.visible { opacity: 1; }  
+        .btn-close { position: absolute; bottom: 30px; padding: 10px 30px; background: #fce4ec; border: none; color: #ff4081; border-radius: 30px; cursor: pointer; font-weight: 800; opacity: 0; pointer-events: none; transition: 0.5s; }  
+        .btn-close.visible { opacity: 1; pointer-events: auto; }
+    </style>  
+</head>  
+<body>  
+
+    <!-- SECTION 1: MINI GAME -->
+    <div id="game-section" class="page-section active-section">
+        <div id="game-container">
+            <div id="hint">Temukan Hati dengan Maju Ke Depan ❤️</div>  
+            <div id="game-viewport">  
+                <div id="world">  
+                    <div id="player">  
+                        <svg class="pixel-char" viewBox="0 0 16 16">  
+                            <g class="body-group">  
+                                <rect x="4" y="2" width="8" height="8" fill="#ffe0bd" />  
+                                <rect x="4" y="2" width="8" height="2" fill="#5c3c2e" />  
+                                <rect x="6" y="5" width="1" height="1" fill="#000" />  
+                                <rect x="9" y="5" width="1" height="1" fill="#000" />  
+                                <rect x="5" y="10" width="6" height="4" fill="#ff85a1" />  
+                                <rect class="arm-left" x="3" y="10" width="2" height="4" fill="#ffe0bd" />  
+                                <rect class="arm-right" x="11" y="10" width="2" height="4" fill="#ffe0bd" />  
+                            </g>  
+                            <rect id="leg-left" class="leg" x="5" y="14" width="2" height="2" fill="#333" />  
+                            <rect id="leg-right" class="leg" x="9" y="14" width="2" height="2" fill="#333" />  
+                        </svg>  
+                    </div>  
+                    <div id="goal-heart" class="heart-wrapper">  
+                        <div class="pixel-heart"></div>  
+                    </div>  
+                    <div class="floor"></div>  
+                </div>  
+                <div id="overlay">  
+                    <div class="big-heart-container" id="big-heart">  
+                        <div class="pixel-heart"></div>  
+                    </div>  
+                    <p style="font-size:12px; margin-top:40px; font-family:'Press Start 2P';">MISI SELESAI!</p>  
+                    <p id="count-text" style="margin-top:20px; color: #ff85a1; font-family:'Press Start 2P'; font-size:10px;">KLIK 3x: 0 / 3</p>  
+                </div>  
+            </div>  
+            <div class="controls">  
+                <div class="btn" id="btn-left">←</div>  
+                <div class="btn" id="btn-right">→</div>  
+                <div class="btn btn-jump" id="btn-jump">JUMP</div>  
+            </div>  
+        </div>
+    </div>
+
+    <!-- SECTION 2: PROFILE -->
+    <div id="profile-section" class="page-section">
+        <div id="profile-container">
+            <div class="sakura-container" id="sakuraContainer"></div>  
+            <div class="card">  
+                <div class="header">  
+                    <div class="video-box">  
+                        <div class="video-inner">  
+                            <video id="virgi-video" src="virgi.mp4" loop muted playsinline></video>  
+                        </div>  
+                    </div>  
+                    <h1 class="main-name">Astrella Virgiananda</h1>  
+                    <p class="jiko">"Suka Berekspresi Melalui Kreasi, Taraa!"</p>  
+                </div>  
+                <div class="bio-container">  
+                    <div class="bio-row" style="animation-delay: 0.05s;"><span class="bio-label">Nama Lengkap</span><span class="bio-value">Astrella Virgiananda Nugraha</span></div>  
+                    <div class="bio-row" style="animation-delay: 0.1s;"><span class="bio-label">Nama Panggilan</span><span class="bio-value">Virgi</span></div>  
+                    <div class="bio-row" style="animation-delay: 0.2s;"><span class="bio-label">TTL</span><span class="bio-value">Bandung, 6 Agustus 2010</span></div>  
+                    <div class="bio-row" style="animation-delay: 0.3s;"><span class="bio-label">Zodiak</span><span class="bio-value">Leo ♌</span></div>  
+                    <div class="bio-row" style="animation-delay: 0.4s;"><span class="bio-label">Tinggi</span><span class="bio-value">162 cm</span></div>  
+                    <div class="bio-row" style="animation-delay: 0.5s;"><span class="bio-label">Gol. Darah</span><span class="bio-value">AB</span></div>  
+                    <div class="bio-row" style="animation-delay: 0.6s;"><span class="bio-label">Tahun Aktif</span><span class="bio-value">2024 - Sekarang</span></div>  
+                    <div class="bio-row" style="animation-delay: 0.7s;"><span class="bio-label">Agensi</span><span class="bio-value">PT. Indonesia Musik Nusantara</span></div>  
+                </div>  
+                <div class="action-area">  
+                    <a href="https://open.spotify.com" target="_blank" class="btn-profile btn-spotify">  
+                        <div class="icon-holder">  
+                            <img src="" alt="Spotify" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174872.png'">  
+                        </div>  
+                        <span class="spotify-text">Dengarkan Lagu Yang<br>Dibuat Untuk Virgi</span>  
+                    </a>  
+                    <button id="btn-to-soulmate" class="btn-profile btn-next-profile">  
+                        SELANJUTNYA ➔  
+                    </button>  
+                </div>  
+                <div class="sosmed-grid">  
+                    <a href="https://x.com/A_VirgiJKT48" target="_blank" class="sosmed-box">  
+                        <img src="" alt="X" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5968/5968958.png'">  
+                    </a>  
+                    <a href="https://www.instagram.com/virgi.jkt48" target="_blank" class="sosmed-box">  
+                        <img src="" alt="IG" onerror="this.src='https://cdn-icons-png.flaticon.com/512/174/174855.png'">  
+                    </a>  
+                    <a href="https://www.tiktok.com/@jkt48.virgi" target="_blank" class="sosmed-box">  
+                        <img src="" alt="TT" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3046/3046121.png'">  
+                    </a>  
+                </div>  
+            </div>  
+        </div>
+    </div>
+
+    <!-- SECTION 3: SOULMATE -->
+    <div id="soulmate-section" class="page-section">
+        <audio id="bg-audio"><source src="./soulmate.mp3" type="audio/mpeg"></audio>  
+        <div id="soulmate-container">
+            <div class="sakura-container" id="sakura-container-soulmate"></div>  
+            <div id="main-scene-soulmate">  
+                <div class="pre-text" id="pre-text-soulmate">Eh.. Ada Surat Nih, Dibuka Yuk...</div>  
+                <div class="envelope-wrapper" id="envelope-trigger">  
+                    <div class="envelope">  
+                        <span class="heart-seal">❤️</span>  
+                    </div>  
+                </div>  
+            </div>  
+            <div id="overlay-soulmate">  
+                <div class="letter-modal" id="modal-content">  
+                    <div class="lyrics-display" id="lyrics-container">  
+                        <div class="footer-text" id="footer-text">Soulmate - Kahitna</div>  
+                        <button class="btn-close" id="btn-close">TUTUP</button>  
+                    </div>  
+                </div>  
+            </div>
+        </div>
+    </div>
+
+    <!-- --- JAVASCRIPT --- -->
+    <script>  
+        // --- LOGIC MINI GAME ---
+        const player = document.getElementById('player');  
+        const world = document.getElementById('world');  
+        const goalHeart = document.getElementById('goal-heart');  
+        const overlay = document.getElementById('overlay');  
+        const countText = document.getElementById('count-text');  
+  
+        let px = 100; let py = 60; let vy = 0;  
+        let isJumping = false; let moveDir = 0; let isWin = false; let clicks = 0;  
+  
+        const speed = 5; const gravity = 0.6; const jumpPower = -12; const groundY = 60;  
+  
+        function generateEnvironment() {  
+            for(let i=0; i<30; i++) {  
+                const cloud = document.createElement('div');  
+                cloud.className = 'cloud';  
+                cloud.style.width = (Math.random() * 100 + 50) + 'px';  
+                cloud.style.height = '30px';  
+                cloud.style.left = (i * 150 + Math.random() * 50) + 'px';  
+                cloud.style.top = (Math.random() * 150 + 50) + 'px';  
+                cloud.style.opacity = Math.random();  
+                world.appendChild(cloud);  
+                if(i % 2 === 0) {  
+                    const bush = document.createElement('div');  
+                    bush.className = 'bush';  
+                    bush.style.left = (i * 150 + Math.random() * 100) + 'px';  
+                    world.appendChild(bush);  
+                }  
+                const flower = document.createElement('div');  
+                flower.className = 'flower';  
+                flower.style.left = (i * 130 + Math.random() * 100) + 'px';  
+                world.appendChild(flower);  
+            }  
+        }  
+  
+        function update() {  
+            if (isWin) return;  
+            if (moveDir !== 0) {  
+                px += moveDir * speed;  
+                if (px < 0) px = 0;  
+                if (px > 3900) px = 3900;  
+                player.style.transform = moveDir === -1 ? 'scaleX(-1)' : 'scaleX(1)';  
+                player.classList.add('walking');  
+            } else {  
+                player.classList.remove('walking');  
+            }  
+            vy += gravity; py -= vy;  
+            if (py <= groundY) { py = groundY; vy = 0; isJumping = false; }  
+            player.style.left = px + 'px'; player.style.bottom = py + 'px';  
+            let cameraX = px - (window.innerWidth / 2);  
+            if (cameraX < 0) cameraX = 0;  
+            if (cameraX > 4000 - window.innerWidth) cameraX = 4000 - window.innerWidth;  
+            world.style.transform = `translateX(${-cameraX}px)`;  
+            if (px > 3450 && py <= groundY + 10) { triggerWin(); }  
+            requestAnimationFrame(update);  
+        }  
+  
+        function triggerWin() {  
+            isWin = true;  
+            player.classList.remove('walking');  
+            player.classList.add('win-pose');  
+            goalHeart.style.transition = "all 0.8s ease-out";  
+            goalHeart.style.left = (px - 22) + "px";  
+            goalHeart.style.bottom = (py + 100) + "px";  
+            setTimeout(() => {  
+                overlay.style.display = 'flex';  
+                goalHeart.style.display = 'none';  
+            }, 1000);  
+        }  
+  
+        function showProfile() {  
+            document.getElementById('game-section').classList.remove('active-section');
+            document.getElementById('profile-section').classList.add('active-section');
+            document.getElementById('profile-container').style.display = 'flex';
+            document.getElementById('virgi-video').play();
+            setInterval(() => createSakuraElement(document.getElementById('sakuraContainer')), 700);
+        }  
+  
+        document.getElementById('big-heart').onclick = () => {  
+            clicks++;  
+            countText.innerText = `KLIK 3x: ${clicks} / 3`;  
+            if (clicks >= 3) {  
+                countText.innerText = "BERHASIL! LOADING...";  
+                setTimeout(() => { showProfile(); }, 800);  
+            }  
+        };  
+  
+        const startMove = (dir) => { if(!isWin) moveDir = dir; };  
+        const stopMove = () => { moveDir = 0; };  
+        const jump = () => { if(!isJumping && !isWin) { vy = jumpPower; isJumping = true; } };  
+  
+        document.getElementById('btn-left').onmousedown = () => startMove(-1);  
+        document.getElementById('btn-right').onmousedown = () => startMove(1);  
+        document.getElementById('btn-jump').onmousedown = jump;  
+        window.onmouseup = stopMove;  
+        document.getElementById('btn-left').ontouchstart = (e) => { e.preventDefault(); startMove(-1); };  
+        document.getElementById('btn-right').ontouchstart = (e) => { e.preventDefault(); startMove(1); };  
+        document.getElementById('btn-jump').ontouchstart = (e) => { e.preventDefault(); jump(); };  
+        window.ontouchend = stopMove;  
+  
+        // --- LOGIC PROFILE & SAKURA ---
+        function createSakuraElement(container) {  
+            const s = document.createElement('div');  
+            s.className = 'sakura';  
+            const size = Math.random() * 8 + 6;  
+            s.style.width = size + 'px'; s.style.height = (size * 0.8) + 'px';  
+            s.style.left = Math.random() * 100 + 'vw';  
+            const dur = Math.random() * 5 + 7;  
+            s.style.animationDuration = dur + 's';  
+            container.appendChild(s);  
+            setTimeout(() => s.remove(), dur * 1000);  
+        }  
+
+        document.getElementById('btn-to-soulmate').onclick = () => {
+            document.getElementById('profile-section').classList.remove('active-section');
+            document.getElementById('soulmate-section').classList.add('active-section');
+            document.getElementById('soulmate-container').style.display = 'flex';
+            setTimeout(() => document.getElementById('pre-text-soulmate').classList.add('visible'), 1000);
+            createSakuraSoulmate();
+        };
+
+        // --- LOGIC SOULMATE ---
+        const lyricsData = [  
+            { text: "Meskipun tlah kau semaikan cinta", time: 3000 + 22000 },  
+            { text: "Dibalik senyuman indah", time: 3000 + 26000 },  
+            { text: "Kau jadikan seakan nyata", time: 3000 + 30000 },  
+            { text: "Seolah kau belahan jiwa", time: 3000 + 34000 },  
+            { text: "Meskipun tak mungkin lagi", time: 3000 + 38000 },  
+            { text: "Tuk menjadi pasanganku", time: 3000 + 42000 },  
+            { text: "Namun ku yakini cinta", time: 3000 + 46000 },  
+            { text: "Kau kekasih hati", time: 3000 + 50000 }  
+        ];  
+  
+        const overlaySoulmate = document.getElementById('overlay-soulmate');  
+        const lyricsContainer = document.getElementById('lyrics-container');  
+        const footerText = document.getElementById('footer-text');  
+        const btnClose = document.getElementById('btn-close');  
+        const audio = document.getElementById('bg-audio');  
+  
+        function createSakuraSoulmate() {  
+            for (let i = 0; i < 20; i++) {  
+                const leaf = document.createElement('div');  
+                leaf.className = 'sakura';  
+                const size = Math.random() * 10 + 10 + 'px';  
+                leaf.style.width = size; leaf.style.height = size;  
+                leaf.style.left = Math.random() * 100 + 'vw';  
+                leaf.style.animationDuration = Math.random() * 5 + 5 + 's';  
+                leaf.style.animationDelay = Math.random() * 5 + 's';  
+                document.getElementById('sakura-container-soulmate').appendChild(leaf);  
+            }  
+        }  
+  
+        document.getElementById('envelope-trigger').onclick = () => {  
+            overlaySoulmate.style.display = 'flex';  
+            document.getElementById('main-scene-soulmate').style.opacity = '0';  
+            setTimeout(() => {  
+                overlaySoulmate.style.opacity = '1';  
+                document.getElementById('modal-content').style.transform = 'scale(1) translateY(0)';  
+                setTimeout(() => {  
+                    audio.play();  
+                    startLyrics();  
+                }, 3000);  
+            }, 100);  
+        };  
+  
+        function startLyrics() {  
+            lyricsData.forEach((item, index) => {  
+                setTimeout(() => {  
+                    const oldLine = document.querySelector('.lyric-text');  
+                    if (oldLine) {  
+                        oldLine.style.opacity = '0';  
+                        setTimeout(() => oldLine.remove(), 1000);  
+                    }  
+                    const line = document.createElement('div');  
+                    line.className = 'lyric-text';  
+                    line.textContent = item.text;  
+                    lyricsContainer.prepend(line);  
+                    setTimeout(() => line.classList.add('active'), 50);  
+                    if (index === lyricsData.length - 1) {  
+                        setTimeout(() => {  
+                            line.style.opacity = '0';  
+                            setTimeout(() => {  
+                                line.remove();  
+                                footerText.classList.add('visible');  
+                                btnClose.classList.add('visible');  
+                            }, 1000);  
+                        }, 4000);  
+                    }  
+                }, item.time - 25000);  
+            });  
+        }  
+  
+        btnClose.onclick = () => { location.reload(); };  
+  
+        // Inisialisasi Game saat Load
+        window.onload = () => {  
+            generateEnvironment();  
+            update();  
+        };
+
+        // Sparkle Click Effect
+        document.addEventListener('mousedown', (e) => {  
+            const p = document.createElement('div');  
+            p.style.position = 'fixed'; p.style.left = (e.clientX - 10) + 'px'; p.style.top = (e.clientY - 10) + 'px';  
+            p.style.pointerEvents = 'none'; p.innerText = '🌸'; p.style.fontSize = '20px'; p.style.zIndex = '9999';  
+            p.style.animation = 'sparkle 0.7s ease-out forwards';  
+            document.body.appendChild(p);  
+            setTimeout(() => p.remove(), 700);  
+        });  
+  
+        const sparkleStyle = document.createElement('style');  
+        sparkleStyle.innerHTML = `@keyframes sparkle { 0% {transform: scale(0); opacity:1;} 100% {transform: scale(2) translateY(-40px); opacity:0;} }`;  
+        document.head.appendChild(sparkleStyle);  
+    </script>  
+</body>  
+</html>
+
+```
